@@ -7,6 +7,27 @@ This repo builds and configures a nanomdm server to run on AWS lambda. It uses t
 - SCEPServerStack: configures API Gateway, scep server in a lambda function, and a backend EFS filesystem
 - MDMProfileServer: generates a simple enroll.mobileconfig file on S3 the devices can download
 
+
+# Architecture
+
+The project structure follows the [AWS Well-Architected Framework](https://docs.aws.amazon.com/wellarchitected/latest/framework/welcome.html) by organizing the project directory structure into **logical units** (e.g. SCEP Server, MDM Server, etc). Each unit should have a directory and include the related infrastructure, runtime, and configuration code. I used [this recommendation](https://aws.amazon.com/blogs/developer/recommended-aws-cdk-project-structure-for-python-applications/) as guidance.
+
+```
+|-- mdmserver
+|   |-- infrastructure.ts
+|   |-- nanomdm                 # NanoMDM server (forked and submoduled)
+|-- scepserver
+|   |-- infrastructure.ts
+|   |-- scep                    # MicroMDM's SCEP server (forked and submoduled)
+|-- mdmProfileServer
+|   |-- infrastructure.ts
+|-- app.ts                      # main app entrypoint
+|-- cdk.json                    # tells the CDK CLI how to deploy our app
+|-- shared_infrastructure.ts    # infrastructure shared by multiple stacks
+
+```
+
+
 # Installation and setup
 
 ## Prerequisites
@@ -28,6 +49,8 @@ Prerequisites:
 Before building and deploying, you'll want to prepare your keys and secrets.
 - add four files to the `secrets` folder: `scep_ca.key`, `scep_ca.pem`, `apns_push.key`, `apns_push.pem`. See [SECRETS](secrets/SECRETS.md) for details on the required secrets.
 - update the `cdk.context.json`'s `local` stanza with your own parameters. The CDK will use this when starting servers, generating profiles, etc.
+
+Note that we do not rely on the scep server to generate its own public cert/private key; we pass it in to provide more control over it.
 
 
 ## Build & Deploy
@@ -61,20 +84,3 @@ And you can test it's working with this:
 
 `./mdmserver/nanomdm/tools/cmdr.py -r | curl -T - -u nanomdm:nanomdm '<MDM_SERVER_URL>/v1/enqueue/E9085AF6-DCCB-5661-A678-BCE8F4D9A2C8'`
 
-
-# Project structure
-
-The project structure follows the [AWS Well-Architected Framework](https://docs.aws.amazon.com/wellarchitected/latest/framework/welcome.html) by organizing the project directory structure into **logical units** (e.g. SCEP Server, MDM Server, etc). Each unit should have a directory and include the related infrastructure, runtime, and configuration code. I used [this recommendation](https://aws.amazon.com/blogs/developer/recommended-aws-cdk-project-structure-for-python-applications/) as guidance.
-
-```
-|-- mdmserver
-|   |-- infrastructure.ts
-|   |-- nanomdm                 # NanoMDM server (forked and submoduled)
-|-- scepserver
-|   |-- infrastructure.ts
-|   |-- scep                    # MicroMDM's SCEP server (forked and submoduled)
-|-- app.ts                      # main app entrypoint
-|-- cdk.json                    # tells the CDK CLI how to deploy our app
-|-- shared_infrastructure.ts    # infrastructure shared by multiple stacks
-
-```

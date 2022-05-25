@@ -1,0 +1,6 @@
+[submodule "mdmserver/nanomdm"]
+	path = mdmserver/nanomdm
+	url = git@github.com:steviec/nanomdm.git
+[submodule "scepserver/scep"]
+	path = scepserver/scep
+	url = git@github.com:steviec/scep.git

@@ -1,0 +1,9 @@
+{
+  "local": {
+    "scepChallengePassword": "FAKE_CHALLENGE_PASSWORD",
+    "scepCertificatePath": "secrets/scep_ca.pem",
+    "scepPrivateKeyPath": "secrets/scep_ca.key",
+    "mdmApiPassword": "FAKE_API_PASSWORD",
+    "mdmApnsTopic": "FAKE_APNS_TOPIC_ID"
+  }
+}
