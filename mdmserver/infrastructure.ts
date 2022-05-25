@@ -31,11 +31,6 @@ export class MDMServerStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props: MDMServerStackProps) {
     super(scope, id, props);
 
-    // ===================
-    // Create lambda function and build/bundle the go code with it
-    const lambdaId = 'nanomdm-lambda'
-    const lambdaStoragePath = '/mnt/mdmserver'  // this is where nanomdm lambda will store files
-
     // ================================
     // Setup EFS storage and access point
     // TODO: Put this in shared infra. Can't right now because of this bug: https://github.com/aws/aws-cdk/issues/18759
@@ -68,6 +63,9 @@ export class MDMServerStack extends cdk.Stack {
     // container approach for repeatability, even though it's a little slower.
     //
     // The specific bundling params took a lot of trial-and-error to figure out. tread carefully.
+
+    const lambdaId = 'nanomdm-lambda'
+    const lambdaStoragePath = '/mnt/mdmserver'  // this is where nanomdm lambda will store files
 
     const buildEnvironment = {
       CGO_ENABLED: '0',
@@ -121,13 +119,8 @@ export class MDMServerStack extends cdk.Stack {
       handler: mdmserverFunction
     })
 
-    // TODO: trigger a lambda function for uploading the push certs to nanoNDM
-    // new triggers.TriggerFunction(this, 'UploadPushCertificate', {
-    //   runtime: lambda.Runtime.NODEJS_16_X,
-    //   handler: 'index.handler',
-    //   code: lambda.Code.fromAsset(__dirname + '/uploadPushCertificateTrigger.ts'),
-    // });
-
+    // ===========================
+    // Export parameters
     new cdk.CfnOutput(this, 'mdmServerUrlRef', {
       value: this.api.url,
       description: 'The URL for the MDM server',

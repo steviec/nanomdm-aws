@@ -46,36 +46,19 @@ export class SCEPServerStack extends cdk.Stack {
       }
     });
 
-    // ===================
-    // Create lambda function and build/bundle the go code with it
-    const lambdaId = 'scepserver-lambda'
-    const lambdaStoragePath = '/mnt/scepserver'  // this is where scep lambda will store files
+
+    // ============================================================
+    // Create lambda function that builds and bundles the Go server
 
     // Read this to understand how to bundle executables via the CDK: https://aws.amazon.com/blogs/devops/building-apps-with-aws-cdk/
     // For Go binaries, you can build via a container or build locally. We're using the 
     // container approach for repeatability, even though it's a little slower.
     //
-    // The specific bundling params took a lot of trial-and-error to figure out. Tread carefully.
-    //
-    // If trying to have the CDK run the build gets too hairy, just build it as a pre-synth step
-    // and use the simpler `lambda.Code.fromAsset('/path/to/prebuilt/binary')` option when creating the Function
-    //
-    // For posterity, here are some useful options if we need a custom build: (read here for more details: https://docs.aws.amazon.com/cdk/api/v1/docs/aws-lambda-readme.html)
-    //
-    // bundlingOptions.image: 
-    //   Instead of using a lambda.Runtime.GO_1_X, we can use a custom docker image using the `from_build` option. 
-    //      image: DockerImage.fromBuild('/path/to/folder/with/dockerfile', {   
-    //        buildArgs: {
-    //          ARG1: 'value1',
-    //        }  
-    //       }),
-    //
-    // Function.code:
-    //   This specifies where to source the executable. It can a prebuilt binary (lambda.Code.fromAsset), a binary that is built in a docker
-    //   container (lambda.Code.fromAsset using bundlingOptions), 
-    
-    // It's gross, but we need to build from repo root in order
-    // to copy the secrets into this function bundle.
+    // The specific bundling params took a lot of trial-and-error to figure out. tread carefully.
+
+    const lambdaId = 'scepserver-lambda'
+    const lambdaStoragePath = '/mnt/scepserver'  // this is where scep lambda will store files
+
     const buildRootPath = path.join(__dirname, '..')
     const bundlingOptions: cdk.BundlingOptions = {
       user: "root",
@@ -137,5 +120,3 @@ export class SCEPServerStack extends cdk.Stack {
     })
   }
 }
-
-// https://docs.aws.amazon.com/secretsmanager/latest/userguide/getting-started.html#term_version
