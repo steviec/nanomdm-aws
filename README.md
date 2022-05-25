@@ -2,7 +2,7 @@ NanoMDM on AWS
 =====================
 
 This repo builds and configures a nanomdm server to run on AWS lambda. It uses the Cloud Development Kit and tries to follow best practices. It uses 4 stacks:
-- SharedInfrastructure: VPC
+- SharedInfrastructure: configures a shared VPC instance
 - MDMServerStack: configures API Gateway, nanomdm in a lambda function, and a backend EFS filesystem
 - SCEPServerStack: configures API Gateway, scep server in a lambda function, and a backend EFS filesystem
 - MDMProfileServer: generates a simple enroll.mobileconfig file on S3 the devices can download
