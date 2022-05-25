@@ -82,5 +82,5 @@ The MDM server needs the APNS push certs to be able to speak to devices. Followi
 
 And you can test it's working with this:
 
-`./mdmserver/nanomdm/tools/cmdr.py -r | curl -T - -u 'nanomdm:<API_PASSWORD>' '<MDM_SERVER_URL>/v1/enqueue/E9085AF6-DCCB-5661-A678-BCE8F4D9A2C8'`
+`./mdmserver/nanomdm/tools/cmdr.py -r | curl -T - -u 'nanomdm:<API_PASSWORD>' '<MDM_SERVER_URL>/v1/enqueue/<DEVICE_ID>'`
 
