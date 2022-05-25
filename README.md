@@ -78,9 +78,9 @@ To test that the servers are doing the right thing, try this:
 
 The MDM server needs the APNS push certs to be able to speak to devices. Following [this guide](https://github.com/micromdm/nanomdm/blob/main/docs/quickstart.md), you'll need to do this next:
 
-`cat ./secrets/mdmcert.download_push.pem  ./secrets/mdmcert.download_push.key | curl -T - -u nanomdm:<API_PASSWORD> '<MDM_SERVER_URL>/v1/pushcert'`
+`cat ./secrets/mdmcert.download_push.pem  ./secrets/mdmcert.download_push.key | curl -T - -u 'nanomdm:<API_PASSWORD>' '<MDM_SERVER_URL>/v1/pushcert'`
 
 And you can test it's working with this:
 
-`./mdmserver/nanomdm/tools/cmdr.py -r | curl -T - -u nanomdm:nanomdm '<MDM_SERVER_URL>/v1/enqueue/E9085AF6-DCCB-5661-A678-BCE8F4D9A2C8'`
+`./mdmserver/nanomdm/tools/cmdr.py -r | curl -T - -u 'nanomdm:<API_PASSWORD>' '<MDM_SERVER_URL>/v1/enqueue/E9085AF6-DCCB-5661-A678-BCE8F4D9A2C8'`
 
