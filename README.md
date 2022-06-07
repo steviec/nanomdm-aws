@@ -7,6 +7,7 @@ This repo builds and configures a nanomdm server to run on AWS lambda. It uses t
 - SCEPServerStack: configures API Gateway, scep server in a lambda function, and a backend EFS filesystem
 - MDMProfileServer: generates a simple enroll.mobileconfig file on S3 the devices can download
 
+WARNING: EFS requires a NAT gateway IP to be run permanently, and these stacks create two of them, which can get costly. Watch your AWS bill. EFS isn't a great long-term solution for this.
 
 # Architecture
 
